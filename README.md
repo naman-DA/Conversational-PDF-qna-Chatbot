@@ -19,17 +19,17 @@ A Streamlit-based Conversational RAG (Retrieval-Augmented Generation) applicatio
   - PDF Loader: PyPDFLoader
 
 #### Project Architecture
-User Query
+- User Query
    ↓
-Retriever (Chroma Vector Store)
+- Retriever (Chroma Vector Store)
    ↓
-Relevant PDF Context
+- Relevant PDF Context
    ↓
-Prompt Template
+- Prompt Template
    ↓
-Groq LLM (LLaMA)
+- Groq LLM (LLaMA)
    ↓
-Response + Chat History
+- Response + Chat History
 
 #### How It Works
 - User uploads one or more PDFs
