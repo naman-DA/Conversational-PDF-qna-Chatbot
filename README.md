@@ -11,13 +11,12 @@ A Streamlit-based Conversational RAG (Retrieval-Augmented Generation) applicatio
 - Maintain session-based chat history
 - Fast and interactive UI with Streamlit
 - Tech Stack
-
-Frontend/UI: Streamlit
-LLM: Groq (LLaMA 4 Scout 17B)
-Framework: LangChain
-Embeddings: HuggingFace
-Vector DB: Chroma
-PDF Loader: PyPDFLoader
+  - Frontend/UI: Streamlit
+  - LLM: Groq (LLaMA 4 Scout 17B)
+  - Framework: LangChain
+  - Embeddings: HuggingFace
+  - Vector DB: Chroma
+  - PDF Loader: PyPDFLoader
 
 #### Project Architecture
 User Query
