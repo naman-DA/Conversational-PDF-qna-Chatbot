@@ -21,9 +21,15 @@ st.write("Upload pdf and chat with their content")
 
 api_key=st.text_input("Enter youd GROQ api key",type="password")
 
+if not api_key:
+    st.info("Enter your Groq API key to start chatting.")
+    
 # check f api key is provided 
 if api_key:
-    llm=ChatGroq(groq_api_key=api_key,model_name="meta-llama/llama-4-scout-17b-16e-instruct")
+    llm=ChatGroq(
+        groq_api_key=api_key,
+        model_name="openai/gpt-oss-120b"
+    )
 
     # chat interface
     session_id=st.text_input("session ID",value="default_session")
@@ -97,10 +103,10 @@ if api_key and uploaded_files:
         | llm
 )
 
-    def get_session_history(session:str)->BaseChatMessageHistory:
-        if session_id not in st.session_state.store:
-            st.session_state.store[session_id]=ChatMessageHistory()
-        return st.session_state.store[session_id]   
+    def get_session_history(session: str) -> BaseChatMessageHistory:
+        if session not in st.session_state.store:
+            st.session_state.store[session] = ChatMessageHistory()
+        return st.session_state.store[session]   
     
     conversational_rag_chain=RunnableWithMessageHistory(
         rag_pipeline,
@@ -109,19 +115,23 @@ if api_key and uploaded_files:
         history_messages_key="chat_history",
 )
 
-    user_input=st.text_input("Your Question")
-    
+    # Chat interface
+    user_input = st.chat_input("Ask a question about your PDF...")
+
     if user_input:
-    # session_history=get_session_history=get_session_history(session_id)
-        response=conversational_rag_chain.invoke(
-            {"input":user_input},config={"configurable":{"session_id":session_id}}
+        response = conversational_rag_chain.invoke(
+            {"input": user_input},
+            config={"configurable": {"session_id": session_id}}
         )
-        
-        st.write(st.session_state.store)
-        st.success(response.content)
-        st.write("Chat history")
-        
+
+    # Display chat history
+    if session_id in st.session_state.store:
         for msg in get_session_history(session_id).messages:
-            st.write(f"{msg.type}:{msg.content}")
-else:
-    st.warning("Please enter your key")
+
+            if msg.type == "human":
+                with st.chat_message("user"):
+                    st.markdown(msg.content)
+
+            elif msg.type == "ai":
+                with st.chat_message("assistant"):
+                    st.markdown(msg.content)
